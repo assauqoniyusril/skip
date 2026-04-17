@@ -25,18 +25,26 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# ... (bagian atas tetap sama)
+
 # Set working directory
 WORKDIR /var/www/html/skpi
 
 # Copy existing files
 COPY ./src /var/www/html/skpi
 
-# Set permissions yang benar
-RUN chown -R www-data:www-data /var/www/html/skpi \
+# PERBAIKAN: Buat folder yang diperlukan jika belum ada, baru set permissions
+RUN mkdir -p /var/www/html/skpi/storage/framework/cache/data \
+    && mkdir -p /var/www/html/skpi/storage/framework/app/cache \
+    && mkdir -p /var/www/html/skpi/storage/framework/sessions \
+    && mkdir -p /var/www/html/skpi/storage/framework/views \
+    && mkdir -p /var/www/html/skpi/storage/logs \
+    && mkdir -p /var/www/html/skpi/bootstrap/cache \
+    && chown -R www-data:www-data /var/www/html/skpi \
     && find /var/www/html/skpi -type d -exec chmod 755 {} \; \
+    && find /var/www/html/skpi -type f -exec chmod 644 {} \; \
     && chmod -R 775 /var/www/html/skpi/storage \
-    && chmod -R 775 /var/www/html/skpi/bootstrap/cache \
-    && chmod -R 755 /var/www/html/skpi/public
+    && chmod -R 775 /var/www/html/skpi/bootstrap/cache
 
 # Optimasi PHP-FPM
 RUN echo "upload_max_filesize = 100M" > /usr/local/etc/php/conf.d/uploads.ini \
