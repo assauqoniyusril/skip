@@ -28,7 +28,7 @@ services:
     environment:
       - APP_ENV=local
       - APP_DEBUG=true
-      - APP_URL=http://absen.dwijacode.my.id
+      - APP_URL=http://skpi.dwijacode.my.id
       - APP_TIMEZONE=Asia/Jakarta
       - DB_CONNECTION=mysql
       - DB_HOST=db
