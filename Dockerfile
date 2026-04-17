@@ -25,13 +25,12 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# ... (bagian atas tetap sama)
 
 # Set working directory
-WORKDIR /var/www/html/skpi
+WORKDIR /var/www/html
 
 # Copy existing files
-COPY ./src /var/www/html/skpi
+COPY ./src /var/www/html
 
 # PERBAIKAN: Buat folder yang diperlukan jika belum ada, baru set permissions
 RUN mkdir -p /var/www/html/skpi/storage/framework/cache/data \
