@@ -22,7 +22,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: skpi_php
-    user: www-data
+    user: "1000:1000"
     working_dir: /var/www/html/skpi
     volumes:
       - ./src:/var/www/html:rw
