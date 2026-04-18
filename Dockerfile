@@ -35,10 +35,5 @@ RUN chown -R www-data:www-data /var/www/html
 # Copy application files
 COPY ./src /var/www/html
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
-
 USER www-data
 EXPOSE 9000
