@@ -28,7 +28,7 @@ RUN pecl install redis && docker-php-ext-enable redis
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 
-WORKDIR /var/www/html/skpi
+WORKDIR /var/www/html
 
 RUN chown -R www-data:www-data /var/www/html/skpi
 
