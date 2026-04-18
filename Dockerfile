@@ -1,31 +1,43 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.3-fpm
 
-# Instal dependensi sistem dan alat build
-RUN apk add --no-cache \
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
     git \
     curl \
     libpng-dev \
+    libonig-dev \
     libxml2-dev \
     zip \
     unzip \
-    oniguruma-dev \
-    icu-dev \
-    autoconf \
-    g++ \
-    make
+    libzip-dev \
+    libpq-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    libicu-dev
 
-# Instal ekstensi PHP standar
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd intl
+# Install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install pdo_mysql mysqli zip exif pcntl bcmath intl
+
 
 # INSTAL EKSTENSI REDIS via PECL
 RUN pecl install redis && docker-php-ext-enable redis
 
-# Ambil Composer
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 
 WORKDIR /var/www/html
 RUN chown -R www-data:www-data /var/www/html
 
+# Copy application files
+COPY ./src /var/www/html
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage \
+    && chmod -R 755 /var/www/html/bootstrap/cache
+
 USER www-data
 EXPOSE 9000
-CMD ["php-fpm"]
