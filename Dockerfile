@@ -28,16 +28,17 @@ RUN pecl install redis && docker-php-ext-enable redis
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 
-WORKDIR /var/www/html
-RUN chown -R www-data:www-data /var/www/html
+WORKDIR /var/www/html/skpi
+
+RUN chown -R www-data:www-data /var/www/html/skpi
 
 # Copy application files
-COPY ./src /var/www/html
+COPY ./src /var/www/html/skpi
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/skpi \
+    && chmod -R 755 /var/www/html/skpi/storage \
+    && chmod -R 755 /var/www/html/skpi/bootstrap/cache
 
 USER www-data
 EXPOSE 9000
