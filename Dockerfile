@@ -30,10 +30,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-RUN chown -R www-data:www-data /var/www/html
+RUN chown -R www-data:www-data /var/www/html && \
+	chmod -R 755 /var/www/html
 
 # Copy application files
 COPY ./src /var/www/html
 
-USER www-data
+# USER www-data
 EXPOSE 9000
